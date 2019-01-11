@@ -8,7 +8,7 @@ USING_NS_CC;
 class BigRollingBall : public Node {
 
 public :
-	const float DEFAULT_RADIUS = 3.0f;
+	static const float DEFAULT_RADIUS;
 	const float DEFAULT_RESTITUTION = 0.5f;
 	const float DEFAULT_DENSITY = 2.0f;
 	const float DEFAULT_FRICTION =0.5f;
@@ -37,3 +37,5 @@ protected:
 	Sprite* spriteChild;
 	PhysicsBody* body;
 };
+
+

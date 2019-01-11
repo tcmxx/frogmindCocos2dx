@@ -10,7 +10,7 @@ class Explosion : public Node {
 
 public:
 	const float MARK_RADIUS = 0.5f;
-	const float EXPLOSION_RADIUS = 6.0f;
+	static const float EXPLOSION_RADIUS;
 	const float EXPLOSION_IMPULSE = 30000000;
 	const int LIVE_TICKS = 10;
 

@@ -10,10 +10,8 @@ public:
 	const float DEFAULT_RESTITUTION = 0.1f;
 	const float DEFAULT_DENSITY = 25.0f;
 	const float DEFAULT_FRICTION = 0.5f;
-	const Size DEFAULT_SIZE = Size(1, 1);
+	static const Size DEFAULT_SIZE;
 	const int LIVE_TICKS = 800;
-
-
 
 	void InitializeWithCommand(PlayerCommand command);
 

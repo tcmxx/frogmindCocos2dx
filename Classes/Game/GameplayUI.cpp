@@ -44,64 +44,65 @@ bool AbilityButton::init(){
     buttonChild->setTitleFontSize(18);
     addChild(buttonChild);
 
-    buttonChild->addClickEventListener([&](Ref* sender){
-        OnClicked();
-    });
-
     buttonChild->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type){
         switch (type)
         {
             case ui::Widget::TouchEventType::BEGAN:
+                StartPreparing();
                 break;
             case ui::Widget::TouchEventType::ENDED:
-
+                StopPreparing();
+                break;
+            case ui::Widget::TouchEventType::CANCELED:
+                //TogglePreparing();
+                TryUseAtOrCancel(buttonChild->getTouchEndPosition());
+                break;
+            case ui::Widget::TouchEventType::MOVED:
+                UpdateAbilityIndicator(buttonChild->getTouchMovePosition());
                 break;
             default:
                 break;
         }
     });
 
-
-    //register the general touch listener
-    auto listener1 = EventListenerTouchOneByOne::create();
-    // trigger when you push down
-    listener1->onTouchBegan = [this](Touch* touch, Event* event){
-        if(this->isPreparing){
-
-            //this->Use(GameScene::getInstance()->screenPosToWorldPos(touch->getLocation()));
-            return true;
-        }
-        return false; // if you are consuming it
-    };
-
-    // trigger when moving touch
-    listener1->onTouchMoved = [](Touch* touch, Event* event){
-        // your code
-        return false; // if you are consuming it
-    };
-
-    // trigger when you let up
-    listener1->onTouchEnded = [this](Touch* touch, Event* event){
-        // your code
-        if(this->isPreparing){
-            auto position = GameScene::getInstance()->screenPosToWorldPos(touch->getLocation());
-            if (range.lowerBound.x < position.x && range.lowerBound.y < position.y
-                &&range.upperBound.x > position.x && range.upperBound.y > position.y) {
-                this->Use(position);
-                return true;
-            }
-        }
-        return false; // if you are consuming it
-    };
-
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
     return true;
 }
 
-void AbilityButton::OnClicked(){
+void AbilityButton::UpdateAbilityIndicator(const Vec2& touchPosition){
+    if(this->isPreparing){
+        auto sprite = mAbility->GetIndicatorSprite(mPlayerIndex);
+        auto position = GameScene::getInstance()->screenPosToWorldPos(touchPosition);
+        sprite->setPosition(position);
+        if (range.lowerBound.x < position.x && range.lowerBound.y < position.y
+            &&range.upperBound.x > position.x && range.upperBound.y > position.y) {
+            sprite->setColor(Color3B(255,255,255));
+        }else{
+            sprite->setColor(Color3B(255,0,0));
+        }
+    }else{
+
+    }
+}
+
+void AbilityButton::TryUseAtOrCancel(const Vec2& touchPosition){
+    if(this->isPreparing){
+        auto position = GameScene::getInstance()->screenPosToWorldPos(touchPosition);
+        if (range.lowerBound.x < position.x && range.lowerBound.y < position.y
+            &&range.upperBound.x > position.x && range.upperBound.y > position.y) {
+            this->Use(position);
+            mAbility->GetIndicatorSprite(mPlayerIndex)->setVisible(false);
+            return;
+        }
+    }
+
+    StopPreparing();
+}
+
+void AbilityButton::StartPreparing(){
     bool inUse = (mPlayerIndex == 0 ? isInUse1 : isInUse2);
     if (cooldownTimer <= 0 && !isPreparing && !inUse) {
         isPreparing = true;
+        mAbility->GetIndicatorSprite(mPlayerIndex)->setVisible(true);
         rangeSprite->setVisible(true);
 
         range = mAbility->GetRange(mPlayerIndex);
@@ -112,8 +113,11 @@ void AbilityButton::OnClicked(){
             isInUse2 = true;
         }
     }
-    else if (cooldownTimer <= 0 && isPreparing) {
+}
+void AbilityButton::StopPreparing(){
+    if (cooldownTimer <= 0 && isPreparing) {
         isPreparing = false;
+        mAbility->GetIndicatorSprite(mPlayerIndex)->setVisible(false);
         rangeSprite->setVisible(false);
         if (mPlayerIndex == 0) {
             isInUse1 = false;
@@ -123,7 +127,6 @@ void AbilityButton::OnClicked(){
         }
     }
 }
-
 
 void AbilityButton::update(float deltaTime) {
 	if (cooldownTimer > 0)
@@ -242,6 +245,23 @@ bool GameplayUI::init() {
     gameController->RegisterAbility(&abilityExplosion);
 
 
+    //add touch event listener
+
+    //  Create a "one by one" touch event listener
+// (processes one touch at a time)
+   /* auto listener1 = EventListenerTouchOneByOne::create();
+    listener1->onTouchBegan = [this](Touch* touch, Event* event){
+        scoreLabel->setString("Begin");
+        return true; // if you are consuming it
+    };
+    listener1->onTouchMoved = [this](Touch* touch, Event* event){
+        scoreLabel->setString("Moved");
+    };
+    listener1->onTouchEnded = [this](Touch* touch, Event* event){
+        scoreLabel->setString("Ended");
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+*/
 
     return true;
 }

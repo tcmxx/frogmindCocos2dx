@@ -3,6 +3,10 @@
 #include <string>
 #include <iostream>
 
+
+
+const float Explosion::EXPLOSION_RADIUS = 6.0f;
+
 Explosion* Explosion::createExplosion(){
 	Explosion* ball = Explosion::create();
 	ball->spriteChild->setScale(ball->MARK_RADIUS*ball->spriteScale);
@@ -81,3 +85,5 @@ void Explosion::update(float deltaTime) {
 		removeFromParent();
 	}
 }
+
+

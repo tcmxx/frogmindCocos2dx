@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-
+const Size SmallCube::DEFAULT_SIZE = Size(1, 1);
 
 SmallCube* SmallCube::createSmallCube(){
 	SmallCube* cube = SmallCube::create();
@@ -32,6 +32,7 @@ void SmallCube::InitializeWithCommand(PlayerCommand command) {
 	playerIndex = command.playerIndex;
 
 	spriteChild->setColor(playerIndex == 0?Color3B(0,255,0):Color3B(0,0,255));
+	spriteChild->setOpacity(55);
 }
 
 
@@ -46,6 +47,8 @@ void SmallCube::AddPhysics() {
 
 	body->setAngularDamping(0.1f);
 	body->setLinearDamping(0.5f);
+
+	spriteChild->setOpacity(255);
 }
 
 

@@ -70,7 +70,7 @@ bool GameScene::init()
     addGameObjects();
 
     //add the b2 debug draw layer
-    getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    //getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     getPhysicsWorld()->setGravity(Vec2(0,-100));
 
     /////////////////////////////

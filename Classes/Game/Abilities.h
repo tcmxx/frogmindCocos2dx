@@ -1,6 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "PlayerCommand.h"
+#include "FLoatingBeam.h"
 
 /// An axis aligned bounding box.
 //copied from Box2D library
@@ -53,6 +54,9 @@ inline bool b2AABB::IsValid() const
 
 class Ability:public PlayerCommandExecuter {
 public:
+
+	Ability(string indicatorSpriteName);
+
 	virtual b2AABB GetRange(int playeIndex) = 0;
 
 	virtual PlayerCommand GenerateCommand(Vec2 position, int playeIndex) = 0;
@@ -61,12 +65,23 @@ public:
 	virtual float GetCoolDownTime() = 0;
 	virtual int GetManaCost() = 0;
 
+	virtual Sprite* GetIndicatorSprite(int playerIndex);
+
 	virtual string GetAbilityName() = 0;
+
+protected:
+	Sprite* indicatorSprite;
 };
 
+inline Sprite* Ability::GetIndicatorSprite(int playerIndex){
+	return indicatorSprite;
+}
 
 class AbilityLargeBall :public Ability {
 public:
+
+	AbilityLargeBall();
+
 	virtual b2AABB GetRange(int playeIndex)override ;
 	virtual PlayerCommand GenerateCommand(Vec2 position, int playeIndex)override ;
 	virtual void ExecuteCommand(PlayerCommand command) override;
@@ -84,6 +99,8 @@ private:
 
 class AbilityFloatingBeam :public Ability {
 public:
+	AbilityFloatingBeam();
+
 	virtual b2AABB GetRange(int playeIndex) override ;
 	virtual PlayerCommand GenerateCommand(Vec2 position, int playeIndex)override;
 	virtual void ExecuteCommand(PlayerCommand command) override;
@@ -91,6 +108,8 @@ public:
 	virtual float GetCoolDownTime() override  { return COOLDOWN_TICK; };
 	virtual int GetManaCost() override  { return MANACOST; };
 	virtual string GetAbilityName() override { return ABILITY_NAME; };
+
+	virtual Sprite* GetIndicatorSprite(int playerIndex) override;
 
 private:
 	const int MANACOST = 4;
@@ -101,8 +120,16 @@ private:
 };
 
 
+inline Sprite* AbilityFloatingBeam::GetIndicatorSprite(int playerIndex){
+	auto sprite = Ability::GetIndicatorSprite(playerIndex);
+	 sprite->setRotation(playerIndex == 0 ? FloatingBeam::DEFAULT_ANGLE*2 : -FloatingBeam::DEFAULT_ANGLE*2);
+	return sprite;
+};
+
 class AbilitySmallCube :public Ability {
 public:
+	AbilitySmallCube();
+
 	virtual b2AABB GetRange(int playeIndex) override ;
 	virtual PlayerCommand GenerateCommand(Vec2 position, int playeIndex)override;
 	virtual void ExecuteCommand(PlayerCommand command) override;
@@ -122,6 +149,8 @@ private:
 
 class AbilityExplosion :public Ability {
 public:
+	AbilityExplosion();
+
 	virtual b2AABB GetRange(int playeIndex) override ;
 	virtual PlayerCommand GenerateCommand(Vec2 position, int playeIndex)override;
 	virtual void ExecuteCommand(PlayerCommand command) override;

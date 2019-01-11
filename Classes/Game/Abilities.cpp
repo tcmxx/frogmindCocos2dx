@@ -5,7 +5,25 @@
 #include "SmallCube.h"
 #include "Explosion.h"
 #include "GameScene.h"
+
+
+
+
+Ability::Ability(string indicatorSpriteName){
+	indicatorSprite = Sprite::create(indicatorSpriteName);
+	indicatorSprite->setVisible(false);
+    GameScene::getInstance()->getGameObjectRootNode()->addChild(indicatorSprite);
+}
+
+
+
 ///-------------------Ability Large Ball--------------------------
+
+AbilityLargeBall::AbilityLargeBall():Ability("largeBallIndicator.png"){
+    float scale = Director::getInstance()->getContentScaleFactor()/64;
+    indicatorSprite->setScale(BigRollingBall::DEFAULT_RADIUS*scale);
+}
+
 b2AABB AbilityLargeBall::GetRange(int playeIndex) {
 	b2AABB aabb;
 	if (playeIndex == 0) {
@@ -37,6 +55,12 @@ void AbilityLargeBall::ExecuteCommand(PlayerCommand command) {
 
 
 ///-------------------Ability Beam--------------------------
+
+AbilityFloatingBeam::AbilityFloatingBeam():Ability("floatingBeamIndicator.png"){
+    float scale = Director::getInstance()->getContentScaleFactor()/128;
+    indicatorSprite->setScale(FloatingBeam::DEFAULT_SIZE.width*scale,FloatingBeam::DEFAULT_SIZE.height*scale);
+}
+
 b2AABB AbilityFloatingBeam::GetRange(int playeIndex) {
 	b2AABB aabb;
 	aabb.lowerBound = Vec2(-20, -10);
@@ -63,6 +87,11 @@ void AbilityFloatingBeam::ExecuteCommand(PlayerCommand command) {
 
 
 ///-------------------Ability Small Cube--------------------------
+AbilitySmallCube::AbilitySmallCube():Ability("smallCubeIndicator.png"){
+    float scale = Director::getInstance()->getContentScaleFactor()/128;
+    indicatorSprite->setScale(SmallCube::DEFAULT_SIZE.width*scale,SmallCube::DEFAULT_SIZE.height*scale);
+}
+
 b2AABB AbilitySmallCube::GetRange(int playeIndex) {
 	b2AABB aabb;
 	aabb.lowerBound = Vec2(-30, 20);
@@ -88,6 +117,11 @@ void AbilitySmallCube::ExecuteCommand(PlayerCommand command) {
 ///-----------------------------------------------------------------
 
 ///-------------------Ability Explosion--------------------------
+AbilityExplosion::AbilityExplosion():Ability("explosionIndicator.png"){
+	float scale = Director::getInstance()->getContentScaleFactor()/64;
+	indicatorSprite->setScale(Explosion::EXPLOSION_RADIUS*scale);
+}
+
 b2AABB AbilityExplosion::GetRange(int playeIndex) {
 	b2AABB aabb;
 	aabb.lowerBound = Vec2(-30, -10);

@@ -4,6 +4,10 @@
 #include <iostream>
 
 
+
+
+const float BigRollingBall::DEFAULT_RADIUS = 3.0f;
+
 BigRollingBall* BigRollingBall::createBigRollingBall(){
 	BigRollingBall* ball = BigRollingBall::create();
 	ball->spriteChild->setScale(ball->DEFAULT_RADIUS*ball->spriteScale);
@@ -29,6 +33,7 @@ void BigRollingBall::InitializeWithCommand(PlayerCommand command) {
 	playerIndex = command.playerIndex;
 
     spriteChild->setColor(playerIndex == 0?Color3B(0,255,0):Color3B(0,0,255));
+    spriteChild->setOpacity(55);
 }
 
 
@@ -43,6 +48,8 @@ void BigRollingBall::AddPhysics() {
 
 	body->setAngularDamping(0.1f);
 	body->setLinearDamping(0.5f);
+
+    spriteChild->setOpacity(255);
 }
 
 
@@ -68,3 +75,5 @@ void BigRollingBall::update(float deltaTime) {
 
 
 }
+
+

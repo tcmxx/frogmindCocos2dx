@@ -12,10 +12,14 @@ class AbilityButton: public Node{
 public:
 
     static AbilityButton* createAbilityButton(Ability* ability, Size size, int playerIndex);
-	void OnClicked();
+	void StartPreparing();
+    void StopPreparing();
+    void TryUseAtOrCancel(const Vec2& touchPosition);
 	void Use(const Vec2& position);
-
+    void UpdateAbilityIndicator(const Vec2& touchPosition);
     void update(float dt) override;
+
+
 
     virtual bool init();
     // implement the "static create()" method manually
@@ -35,6 +39,7 @@ private:
 
 	b2AABB range;
 
+    //Vec2 touchPositoin;
 
 	float buttonScale;
 	ui::Button* buttonChild;
