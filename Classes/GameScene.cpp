@@ -54,7 +54,7 @@ bool GameScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     gameObjectRootNode->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                         origin.y + visibleSize.height/2-15*CAMERA_SCALE));
+                                         origin.y + visibleSize.height/2-8*CAMERA_SCALE));
     gameObjectRootNode->setScale(CAMERA_SCALE);
 
 

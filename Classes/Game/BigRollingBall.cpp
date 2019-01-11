@@ -70,7 +70,7 @@ void BigRollingBall::update(float deltaTime) {
 
 
 	if (time->tick >= tickToDestroy) {
-		removeFromParent();
+        removeFromParentAndCleanup(true);
 	}
 
 

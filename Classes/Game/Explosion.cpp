@@ -82,7 +82,7 @@ void Explosion::update(float deltaTime) {
 		Explode();
 	}
 	if (time->tick == tickToDestroy) {
-		removeFromParent();
+        removeFromParentAndCleanup(true);
 	}
 }
 

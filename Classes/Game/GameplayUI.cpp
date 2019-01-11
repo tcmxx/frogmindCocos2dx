@@ -31,6 +31,8 @@ AbilityButton* AbilityButton::createAbilityButton(Ability* ability, Size size, i
 
     button->rangeSprite->setVisible(false);
 
+    button->manaCostLabel->setString(std::to_string(ability->GetManaCost()));
+
     return button;
 }
 
@@ -49,6 +51,7 @@ bool AbilityButton::init(){
         {
             case ui::Widget::TouchEventType::BEGAN:
                 StartPreparing();
+                UpdateAbilityIndicator(buttonChild->getTouchBeganPosition());
                 break;
             case ui::Widget::TouchEventType::ENDED:
                 StopPreparing();
@@ -65,6 +68,10 @@ bool AbilityButton::init(){
         }
     });
 
+    manaCostLabel = Label::createWithTTF("3", "fonts/Marker Felt.ttf", 23);
+    manaCostLabel->setPosition(20,20);
+    manaCostLabel->setColor(Color3B(0,0,255));
+    buttonChild->addChild(manaCostLabel);
     return true;
 }
 
@@ -212,19 +219,28 @@ bool GameplayUI::init() {
                                      origin.y + visibleSize.height - 25));
     this->addChild(manaBarPlayer2, 1);
 
+    //mana labels
+    manaLabelPlayer1 = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 20);
+    manaLabelPlayer1->setPosition(Vec2(origin.x +  150, origin.y + visibleSize.height - 55));
+    this->addChild(manaLabelPlayer1, 1);
+    manaLabelPlayer2 = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 20);
+    manaLabelPlayer2->setPosition(Vec2(origin.x + visibleSize.width -  150, origin.y + visibleSize.height - 55));
+    this->addChild(manaLabelPlayer2, 1);
     //ability buttons
+    //first player buttons
     auto button = AbilityButton::createAbilityButton(&abilityLargeBall,CARD_BUTTON_SIZE,0);
-    button->setPosition(Vec2(origin.x + 60,origin.y + visibleSize.height/2 - 150));
+    button->setPosition(Vec2(origin.x + visibleSize.width/2 - 150,origin.y + 50));
     addChild(button);button = AbilityButton::createAbilityButton(&abiliityFloatingBeam,CARD_BUTTON_SIZE,0);
-    button->setPosition(Vec2(origin.x + 60,origin.y  + visibleSize.height/2 - 50));
+    button->setPosition(Vec2(origin.x + visibleSize.width/2 - 50,origin.y  + 50));
     addChild(button);
     button = AbilityButton::createAbilityButton(&abilitySmallCube,CARD_BUTTON_SIZE,0);
-    button->setPosition(Vec2(origin.x + 60,origin.y +  + visibleSize.height/2 + 50));
+    button->setPosition(Vec2(origin.x + visibleSize.width/2 + 50,origin.y + 50));
     addChild(button);
     button = AbilityButton::createAbilityButton(&abilityExplosion,CARD_BUTTON_SIZE,0);
-    button->setPosition(Vec2(origin.x + 60,origin.y +  + visibleSize.height/2 + 150));
+    button->setPosition(Vec2(origin.x + visibleSize.width/2 + 150,origin.y + 50));
     addChild(button);
 
+    //second player buttons
     button = AbilityButton::createAbilityButton(&abilityLargeBall,CARD_BUTTON_SIZE,1);
     button->setPosition(Vec2(origin.x  + visibleSize.width - 60,origin.y + visibleSize.height/2 - 150));
     addChild(button);
@@ -277,10 +293,10 @@ void GameplayUI::update(float dt){
     manaBarPlayer1->setTextureRect(Rect(0,0,manaRatio*120,20));
     manaBarPlayer1->setPosition(Vec2(origin.x  + manaRatio*150,
                                      origin.y + visibleSize.height - 25));
-
+    manaLabelPlayer1->setString(std::to_string((int)GameController::GetInstance()->playerOneMana));
     manaRatio = GameController::GetInstance()->playerTwoMana/GameController::GetInstance()->MAX_MANA;
     manaBarPlayer2->setTextureRect(Rect((1-manaRatio)*120,0,manaRatio*120,20));
     manaBarPlayer2->setPosition(Vec2(origin.x  + visibleSize.width - manaRatio*150,
                                      origin.y + visibleSize.height - 25));
-
+    manaLabelPlayer2->setString(std::to_string((int)GameController::GetInstance()->playerTwoMana));
 }

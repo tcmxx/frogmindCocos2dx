@@ -44,6 +44,8 @@ private:
 	float buttonScale;
 	ui::Button* buttonChild;
     Sprite* rangeSprite;
+    Label* manaCostLabel;
+
 
 };
 
@@ -73,5 +75,8 @@ private:
 
     Sprite* manaBarPlayer1;
     Sprite* manaBarPlayer2;
+
+    Label* manaLabelPlayer1;
+    Label* manaLabelPlayer2;
 };
 

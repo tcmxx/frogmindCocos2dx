@@ -45,14 +45,14 @@ bool Basket::onContactBegin(PhysicsContact& contact){
     if(nodeA){
         if(nodeA->getTag()==TargetBall::DEFAULT_TAG && nodeB == this){
             GameController::GetInstance()->AddPlayerPoint(isPlayerOne);
-            nodeA->removeFromParent();
+            nodeA->removeFromParentAndCleanup(true);
         }
     }
 
     if(nodeB){
         if(nodeB->getTag()==TargetBall::DEFAULT_TAG && nodeA == this){
             GameController::GetInstance()->AddPlayerPoint(isPlayerOne);
-            nodeB->removeFromParent();
+            nodeB->removeFromParentAndCleanup(true);
         }
     }
 

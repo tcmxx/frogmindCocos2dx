@@ -62,7 +62,7 @@ void FloatingBeam::update(float deltaTime) {
 		AddPhysics();
 	}
 	if (time->tick == tickToDestroy) {
-		removeFromParent();
+        removeFromParentAndCleanup(true);
 	}
 }
 
